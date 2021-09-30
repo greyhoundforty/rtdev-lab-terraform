@@ -1,0 +1,6 @@
+name           = "v1"
+resource_group = "CDE"
+pdns_instance  = "dns-services-rt"
+region         = "us-east"
+vpc_name       = "rtdev-lab"
+zone_name      = "rtdev.lab"
