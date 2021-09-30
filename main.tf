@@ -66,21 +66,21 @@ module "centos_box" {
   allow_ip_spoofing = false
 }
 
-module "rhel_box" {
-  source            = "./instance"
-  vpc_id            = data.ibm_is_vpc.project.id
-  subnet_id         = data.ibm_is_vpc.project.subnets[0].id
-  ssh_keys          = [data.ibm_is_ssh_key.project.id]
-  resource_group_id = data.ibm_resource_group.project.id
-  name              = "${var.name}-rhel8"
-  os_image          = "ibm-redhat-8-4-minimal-amd64-1"
-  dns_zone          = ibm_dns_zone.project.zone_id
-  zone              = data.ibm_is_zones.region.zones[0]
-  pdns_instance     = data.ibm_resource_instance.dns.guid
-  security_groups   = [module.bastion_box.bastion_maintenance_group_id]
-  tags              = concat(var.tags)
-  allow_ip_spoofing = false
-}
+# module "rhel_box" {
+#   source            = "./instance"
+#   vpc_id            = data.ibm_is_vpc.project.id
+#   subnet_id         = data.ibm_is_vpc.project.subnets[0].id
+#   ssh_keys          = [data.ibm_is_ssh_key.project.id]
+#   resource_group_id = data.ibm_resource_group.project.id
+#   name              = "${var.name}-rhel8"
+#   os_image          = "ibm-redhat-8-4-minimal-amd64-1"
+#   dns_zone          = ibm_dns_zone.project.zone_id
+#   zone              = data.ibm_is_zones.region.zones[0]
+#   pdns_instance     = data.ibm_resource_instance.dns.guid
+#   security_groups   = [module.bastion_box.bastion_maintenance_group_id]
+#   tags              = concat(var.tags)
+#   allow_ip_spoofing = false
+# }
 
 module "debian_box" {
   source            = "./instance"
