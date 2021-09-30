@@ -14,15 +14,21 @@ module "bastion_box" {
   source  = "we-work-in-the-cloud/vpc-bastion/ibm"
   version = "0.0.7"
 
-  create_public_ip     = true
-  allow_ssh_from       = "0.0.0.0/0"
-  name                 = "${var.name}-bastion"
-  resource_group_id    = data.ibm_resource_group.project.id
-  vpc_id               = data.ibm_is_vpc.project.id
-  subnet_id            = data.ibm_is_vpc.project.subnets[0].id
-  ssh_key_ids          = [data.ibm_is_ssh_key.project.id]
-  security_group_rules = var.security_group_rules
-  tags                 = concat(var.tags)
+  create_public_ip  = true
+  allow_ssh_from    = "0.0.0.0/0"
+  name              = "${var.name}-bastion"
+  resource_group_id = data.ibm_resource_group.project.id
+  vpc_id            = data.ibm_is_vpc.project.id
+  subnet_id         = data.ibm_is_vpc.project.subnets[0].id
+  ssh_key_ids       = [data.ibm_is_ssh_key.project.id]
+  tags              = concat(var.tags)
+}
+
+# open the VPN port on the bastion
+resource "ibm_is_security_group_rule" "outbound" {
+  group     = module.bastion.bastion_maintenance_group_id
+  direction = "outbound"
+  remote    = "0.0.0.0/0"
 }
 
 resource "ibm_dns_resource_record" "bastion" {

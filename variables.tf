@@ -15,7 +15,7 @@ variable "pdns_instance" {
 }
 
 variable "tags" {
-  default = ["owner:ryantiffany"]
+  default = ["owner:ryantiffany", "project:rtdev-lab"]
 }
 
 variable "resource_group" {
