@@ -14,14 +14,15 @@ module "bastion_box" {
   source  = "we-work-in-the-cloud/vpc-bastion/ibm"
   version = "0.0.7"
 
-  create_public_ip  = true
-  allow_ssh_from    = "0.0.0.0/0"
-  name              = "${var.name}-bastion"
-  resource_group_id = data.ibm_resource_group.project.id
-  vpc_id            = data.ibm_is_vpc.project.id
-  subnet_id         = data.ibm_is_vpc.project.subnets[0].id
-  ssh_key_ids       = [data.ibm_is_ssh_key.project.id]
-  tags              = concat(var.tags)
+  create_public_ip     = true
+  allow_ssh_from       = "0.0.0.0/0"
+  name                 = "${var.name}-bastion"
+  resource_group_id    = data.ibm_resource_group.project.id
+  vpc_id               = data.ibm_is_vpc.project.id
+  subnet_id            = data.ibm_is_vpc.project.subnets[0].id
+  ssh_key_ids          = [data.ibm_is_ssh_key.project.id]
+  security_group_rules = var.security_group_rules
+  tags                 = concat(var.tags)
 }
 
 resource "ibm_dns_resource_record" "bastion" {
@@ -66,21 +67,21 @@ module "centos_box" {
   allow_ip_spoofing = false
 }
 
-# module "rhel_box" {
-#   source            = "./instance"
-#   vpc_id            = data.ibm_is_vpc.project.id
-#   subnet_id         = data.ibm_is_vpc.project.subnets[0].id
-#   ssh_keys          = [data.ibm_is_ssh_key.project.id]
-#   resource_group_id = data.ibm_resource_group.project.id
-#   name              = "${var.name}-rhel8"
-#   os_image          = "ibm-redhat-8-4-minimal-amd64-1"
-#   dns_zone          = ibm_dns_zone.project.zone_id
-#   zone              = data.ibm_is_zones.region.zones[0]
-#   pdns_instance     = data.ibm_resource_instance.dns.guid
-#   security_groups   = [module.bastion_box.bastion_maintenance_group_id]
-#   tags              = concat(var.tags)
-#   allow_ip_spoofing = false
-# }
+module "rhel_box" {
+  source            = "./instance"
+  vpc_id            = data.ibm_is_vpc.project.id
+  subnet_id         = data.ibm_is_vpc.project.subnets[0].id
+  ssh_keys          = [data.ibm_is_ssh_key.project.id]
+  resource_group_id = data.ibm_resource_group.project.id
+  name              = "${var.name}-rhel8-3"
+  os_image          = "ibm-redhat-8-3-minimal-amd64-3"
+  dns_zone          = ibm_dns_zone.project.zone_id
+  zone              = data.ibm_is_zones.region.zones[0]
+  pdns_instance     = data.ibm_resource_instance.dns.guid
+  security_groups   = [module.bastion_box.bastion_maintenance_group_id]
+  tags              = concat(var.tags)
+  allow_ip_spoofing = false
+}
 
 module "debian_box" {
   source            = "./instance"

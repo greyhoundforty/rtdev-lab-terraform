@@ -18,3 +18,7 @@ data "ibm_resource_instance" "dns" {
 data "ibm_is_zones" "region" {
   region = var.region
 }
+
+data "ibm_is_images" "public" {
+  visibility = "public"
+}
